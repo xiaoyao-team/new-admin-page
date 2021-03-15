@@ -1,28 +1,33 @@
 <template>
   <div class="sidebar">
     <!-- <el-scrollbar wrap-class="scrollbar-wrapper"> -->
-      <el-menu
-        :default-active="activeIndex"
-        class="el-menu-vertical-demo"
-        background-color="#329fea"
-        text-color="#F2F6FC"
-        active-text-color="#fff"
-        style="border: none;"
+    <el-menu
+      :default-active="activeIndex"
+      class="el-menu-vertical-demo"
+      background-color="#329fea"
+      text-color="#F2F6FC"
+      active-text-color="#fff"
+      style="border: none;"
+    >
+      <el-menu-item
+        v-show="item.meta.affix"
+        v-for="(item,index) in routes[2].children"
+        :index="index.toString()"
+        :key="index"
       >
-        <el-menu-item
-          v-show="item.meta.affix"
-          v-for="(item,index) in routes[2].children"
-          :index="index.toString()"
-          :key="index"
+        <router-link
+          v-if="item.name!='GroupInfo'"
+          class="sidebar-item"
+          :to="{name:item.name}"
+          :key="item.name"
         >
-          <router-link tag="li" class="sidebar-item" :to="{name:item.name}" :key="item.name">
-            <div class="item-content">
-              <i style="margin: 0 10px;" :class="item.meta.icon"></i>
-              <span class="item-text">{{item.meta.zhName}}</span>
-            </div>
-          </router-link>
-        </el-menu-item>
-      </el-menu>
+          <div class="item-content">
+            <i style="margin: 0 10px;" :class="item.meta.icon"></i>
+            <span class="item-text">{{item.meta.zhName}}</span>
+          </div>
+        </router-link>
+      </el-menu-item>
+    </el-menu>
     <!-- </el-scrollbar> -->
   </div>
 </template>

@@ -99,7 +99,12 @@
         label-width="100px"
       >
         <el-form-item label="所属游戏:" prop="appId">
-          <el-select v-model="createdGroupForm.appId" placeholder="请输入或选择所属游戏" filterable style="width:100%">
+          <el-select
+            v-model="createdGroupForm.appId"
+            placeholder="请输入或选择所属游戏"
+            filterable
+            style="width:100%"
+          >
             <el-option
               v-for="(item,index) in appList"
               :label="item.appName"
@@ -123,7 +128,8 @@
 <script lang="ts">
 import Vue from "vue";
 import { groupListModule } from "@/store/modules/groupList";
-import { LoginModule } from '@/store/modules/login'
+import { LoginModule } from "@/store/modules/login";
+import { handleConfirm } from "@/utils/common";
 
 export default Vue.extend({
   name: "groupList",
@@ -189,37 +195,39 @@ export default Vue.extend({
       });
     },
     searchGroup(index: number, row: any) {
-      this.$router.push({name:'GroupInfo',params:{groupId:row.groupId}});
+      this.$router.push({
+        name: "GroupInfo",
+        params: { groupId: row.groupId }
+      });
     },
     copyGroup(index: number, row: any) {
-      this.$confirm('确认复制活动组'+row.groupName+'？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        groupListModule.copyGroup({ groupId: row.groupId }).then(() => {
+      handleConfirm("是否确定复制" + row.groupName + "活动组 ?", "warning")
+        .then(() => {
+          groupListModule.copyGroup({ groupId: row.groupId }).then(() => {
             this.$message({
-              message: "活动组复制成功",
+              message: row.groupName + "活动组复制成功",
               type: "success"
             });
           });
-      }).catch((err) => {console.log("cancel",err)})
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     publishGroup(index: number, row: any) {
-      this.$confirm('确认发布活动组'+row.groupName+'？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        console.log("publishGroup")
-      }).catch((err) => {console.log("cancel",err)})
+      handleConfirm(
+        "是否确定发布" + row.groupName + "活动组到正式 ?",
+        "warning"
+      )
+        .then(() => {
+          console.log("publishGroup");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     deleteGroup(index: number, row: any) {
-      this.$confirm("确认删除活动组"+row.groupName+"？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
+      handleConfirm("是否确定删除" + row.groupName + "活动组 ?", "warning")
         .then(() => {
           groupListModule.deleteGroup({ groupId: row.groupId }).then(() => {
             this.$message({
@@ -229,7 +237,7 @@ export default Vue.extend({
           });
         })
         .catch(err => {
-          console.log("cancel", err);
+          console.log(err);
         });
     }
   }

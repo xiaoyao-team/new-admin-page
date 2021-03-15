@@ -28,7 +28,7 @@
         <i class="el-icon-service"></i>
           使用手册
         </a>
-        <router-link tag="div" :to="{name:'UploadDocs'}" class="list-item">
+        <router-link  :to="{name:'UploadDocs'}" class="list-item">
           <i class="el-icon-document"></i>
           更新日志
         </router-link>
@@ -47,7 +47,7 @@ export default Vue.extend({
       return LoginModule.userName;
     },
     title(){
-      if (process.env.VUE_APP_BASE_API.indexOf("https")) {
+      if (process.env.VUE_APP_BASE_API.split(":").includes("https")) {
         return '活动管理平台-正式'
       }else{
         return '活动管理平台-测试'

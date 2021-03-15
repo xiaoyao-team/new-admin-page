@@ -9,7 +9,7 @@
         @click="addActivity"
       >添加新活动</el-button>
       <!-- left -->
-      <el-col :span="16">
+      <el-col :span="10">
         <div class="grid-content bg-purple">
           <el-form
             ref="addActivityForm"
@@ -21,10 +21,10 @@
               <span>{{groupList.activityGroupBase.activityGroup.groupId}}</span>
             </el-form-item>
             <el-form-item label="活动名称 :" prop="activityName">
-              <el-input v-model="addActivityForm.activityName" style="width:70%;min-width:200px"></el-input>
+              <el-input v-model="addActivityForm.activityName" style="width:90%;min-width:120px"></el-input>
             </el-form-item>
             <el-form-item label="活动时间 :" required>
-              <el-col :span="8">
+              <el-col :span="10">
                 <el-form-item prop="beginTime">
                   <el-date-picker
                     v-model="addActivityForm.beginTime"
@@ -37,7 +37,7 @@
                 </el-form-item>
               </el-col>
               <el-col class="line" :span="1">至</el-col>
-              <el-col :span="8">
+              <el-col :span="10">
                 <el-form-item prop="endTime">
                   <el-date-picker
                     v-model="addActivityForm.endTime"
@@ -68,34 +68,54 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="活动排序 :" prop="sort">
-              <el-input v-model="addActivityForm.sort" style="width:70%;min-width:200px"></el-input>
+              <el-input v-model="addActivityForm.sort" style="width:90%;min-width:120px"></el-input>
             </el-form-item>
             <el-form-item label="活动说明 :" prop="activityDesc">
               <el-input
                 type="textarea"
                 v-model="addActivityForm.activityDesc"
-                style="width:70%;min-width:200px"
+                style="width:90%;min-width:120px"
               ></el-input>
             </el-form-item>
           </el-form>
         </div>
       </el-col>
       <!-- right -->
-      <!-- <el-col :span="14" style="border-left:1px dashed #DCDFE6;">
+      <el-col :span="14"  style="border-left:1px dashed #DCDFE6;">
         <div class="grid-content bg-purple">
+          <contation-forms :contationData='contationData' @setCondition='setActivityCondition'></contation-forms>
         </div>
-      </el-col>-->
+      </el-col>
     </el-row>
   </div>
 </template>
 <script lang="ts">
 import Vue from "vue";
 import { groupInfoModule } from "@/store/modules/groupInfo";
+import { ACTIVITY_CONDITION } from './index'
+import ContationForms from '@/components/ContationForm.vue'
 
 export default Vue.extend({
   name: "addActivityForm",
+  components: {
+    ContationForms
+  },
   data() {
+    const checkTime = (rule: any, value: any, callback: any) => {
+      if (!value) {
+        callback(new Error('请选择活动时间'));
+      } else {
+        const beginTime_ = new Date((this as any).addActivityForm.beginTime).getTime();
+        const endTime_ = new Date((this as any).addActivityForm.endTime).getTime();
+        if (beginTime_  && endTime_ && beginTime_>endTime_) {
+          callback(new Error('活动开始时间不能大于结束时间'));
+        }else{
+          callback();
+        }
+      }
+    };
     return {
+      contationData:[],
       addActivityForm: {
         activityName: "",
         groupId: "",
@@ -111,24 +131,22 @@ export default Vue.extend({
         activityName: [
           { required: true, message: "请输入活动名称", trigger: "blur" }
         ],
-        beginTime: [
-          { required: true, message: "请选择活动开始时间", trigger: "change" }
-        ],
-        endTime: [
-          { required: true, message: "请选择活动结束时间", trigger: "change" }
-        ],
         activityType: [
           { required: true, message: "请选中活动类型", trigger: "change" }
         ],
         activityStatus: [
           { required: true, message: "请选中活动装填", trigger: "change" }
         ],
-        sort: [{ required: true, message: "请输入活动排序", trigger: "blur" }]
+        sort: [{ required: true, message: "请输入活动排序", trigger: "blur" }],
+        beginTime: [{ validator: checkTime, trigger: "change" }],
+        endTime: [{ validator: checkTime, trigger: "change" }],
       }
     };
   },
   mounted() {
     this.addActivityForm.sort = this.activityTabs.length;
+    (this.contationData as any) = JSON.parse(JSON.stringify(ACTIVITY_CONDITION));
+
   },
   computed: {
     groupList() {
@@ -140,6 +158,9 @@ export default Vue.extend({
   },
 
   methods: {
+    setActivityCondition(data: any){
+      console.log("addActivityForm>>>setActivityCondition>>>>>>>>>", data)
+    },
     addActivity() {
       (this.$refs.addActivityForm as any).validate((valid: any) => {
         if (valid) {

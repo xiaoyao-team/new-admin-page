@@ -3,7 +3,7 @@
     <el-row :gutter="20" style="border-bottom:1px dashed #DCDFE6">
       <el-button
         size="small"
-        type="primary"
+        type="warning"
         plain
         class="change_group_btn el-icon-edit"
         @click="editGrop"
@@ -71,6 +71,7 @@
 import Vue from "vue";
 import { groupInfoModule } from "@/store/modules/groupInfo";
 import { LoginModule } from "@/store/modules/login";
+import { handleConfirm } from "@/utils/common";
 
 export default Vue.extend({
   name: "editGroupForm",
@@ -112,24 +113,33 @@ export default Vue.extend({
   },
   methods: {
     editGrop() {
-      (this.$refs.groupForm as any).validate((valid: any) => {
-        if (valid) {
-          groupInfoModule.editGroupInfo(this.groupForm).then(() => {
-            this.$message({
-              message: "活动组修改成功",
-              type: "success"
-            });
+      handleConfirm(
+        "是否确定修改" + this.groupForm.groupName + "活动组配置吗 ?",
+        "warning"
+      )
+        .then(() => {
+          (this.$refs.groupForm as any).validate((valid: any) => {
+            if (valid) {
+              groupInfoModule.editGroupInfo(this.groupForm).then(() => {
+                this.$message({
+                  message: this.groupForm.groupName + "活动组修改成功",
+                  type: "success"
+                });
+              });
+            } else {
+              return console.log("error submit!!");
+            }
           });
-        } else {
-          return console.log("error submit!!");
-        }
-      });
-      // (this.$refs.groupForm2 as any).validate((valid: any) => {
-      //   if (!valid) {
-      //     return console.log('error submit!!');
-      //   }
-      // });
-      //
+          // (this.$refs.groupForm2 as any).validate((valid: any) => {
+          //   if (!valid) {
+          //     return console.log('error submit!!');
+          //   }
+          // });
+          //
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     initGroupForm() {
       Object.keys(this.groupForm).map((item: any) => {

@@ -126,11 +126,9 @@
         </div>
       </el-col>
       <!-- right -->
-      <el-col :span="14" >
+      <el-col :span="14"  style="border-left:1px dashed #DCDFE6;">
         <div class="grid-content bg-purple">
-          <el-form ref="groupForm2" :rules="activityRules" :model="addRewardForm" label-width="100px">
-            <el-form-item label="条件配置 :"></el-form-item>
-          </el-form>
+          <contation-form :contationData='contationData' @setCondition='setRewardCondition'></contation-form>
         </div>
       </el-col>
     </el-row>
@@ -139,10 +137,16 @@
 <script lang="ts">
 import Vue from "vue";
 import { groupInfoModule } from "@/store/modules/groupInfo";
+import {REWARD_CONDITION} from '../index';
+import ContationForm from '@/components/ContationForm.vue'
 export default Vue.extend({
   name: "addRewardForm",
+  components: {
+    ContationForm
+  },
   data() {
     return {
+      contationData:[],
       dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
@@ -184,6 +188,7 @@ export default Vue.extend({
     this.addRewardForm.sort = (this.activityData as any).giftPackageList.length+1;
     this.addRewardForm.activityId = (this.activityData as any).activityId;
     (this.addRewardForm as any).groupId = (this.activityData as any).groupId;
+    (this.contationData as any) = JSON.parse(JSON.stringify(REWARD_CONDITION));
   },
   computed: {
     activityTabs() {
@@ -195,6 +200,9 @@ export default Vue.extend({
   },
 
   methods: {
+    setRewardCondition(data: any){
+      console.log("editRewardForm>>>setRewardCondition>>>>>>>>>", data)
+    },
     handleRemove(file: any) {
       console.log(file);
     },

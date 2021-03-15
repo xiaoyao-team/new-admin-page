@@ -1,18 +1,29 @@
 <template>
   <div>
     <el-row :gutter="20" style="border-bottom:1px dashed #DCDFE6">
-      <el-button size="small" type="primary" plain class="change_group_btn el-icon-edit" @click="editActivity">修改活动</el-button>
+      <el-button
+        size="small"
+        type="warning"
+        plain
+        class="change_group_btn el-icon-edit"
+        @click="editActivity"
+      >修改活动</el-button>
       <!-- left -->
-      <el-col :span="10"  style="border-right:1px dashed #DCDFE6;" >
-        <div class="grid-content bg-purple" >
-          <el-form ref="editActivityForm" :rules="activityRules" :model="editActivityForm" label-width="100px">
+      <el-col :span="10">
+        <div class="grid-content bg-purple">
+          <el-form
+            ref="editActivityForm"
+            :rules="activityRules"
+            :model="editActivityForm"
+            label-width="100px"
+          >
             <el-form-item label="活动ID :">
-            <span>{{editActivityForm.activityId}}</span>
+              <span>{{editActivityForm.activityId}}</span>
             </el-form-item>
             <el-form-item label="活动名称 :" prop="activityName">
               <el-input v-model="editActivityForm.activityName" style="width:95%;min-width:120px"></el-input>
             </el-form-item>
-            <el-form-item label="活动时间 :" required >
+            <el-form-item label="活动时间 :" required>
               <el-col :span="10">
                 <el-form-item prop="beginTime">
                   <el-date-picker
@@ -70,11 +81,9 @@
         </div>
       </el-col>
       <!-- right -->
-      <el-col :span="14">
+      <el-col :span="14"  style="border-left:1px dashed #DCDFE6;">
         <div class="grid-content bg-purple">
-          <el-form ref="groupForm2" :rules="activityRules" :model="editActivityForm" label-width="120px">
-            <el-form-item label="活动条件配置 :"></el-form-item>
-          </el-form>
+          <contation-form :contationData='contationData' @setCondition='setActivityCondition'></contation-form>
         </div>
       </el-col>
     </el-row>
@@ -83,33 +92,51 @@
 <script lang="ts">
 import Vue from "vue";
 import { groupInfoModule } from "@/store/modules/groupInfo";
+import { handleConfirm } from "@/utils/common";
+import { ACTIVITY_CONDITION } from '../index'
+import ContationForm from '@/components/ContationForm.vue'
 export default Vue.extend({
   name: "editActivityForm",
-  // props:['activityData'],
+  components: {
+    ContationForm
+  },
   data() {
+    const checkTime = (rule: any, value: any, callback: any) => {
+      if (!value) {
+        callback(new Error('请选择活动时间'));
+      } else {
+        const beginTime_ = new Date((this as any).editActivityForm.beginTime).getTime();
+        const endTime_ = new Date((this as any).editActivityForm.endTime).getTime();
+        if (beginTime_  && endTime_ && beginTime_>endTime_) {
+          callback(new Error('活动开始时间不能大于结束时间'));
+        }else{
+          callback();
+        }
+      }
+    };
     return {
-      editActivityForm:{
-        activityId: '',
-        activityName: '',
-        groupId: '',
-        beginTime: '',
-        endTime: '',
-        activityType: '',
-        activityStatus: '',
-        activityDesc: '',
-        sort: '',
-        packageList: '',
-        conditionList: '',
-        appId: '',
+      editActivityForm: {
+        activityId: "",
+        activityName: "",
+        groupId: "",
+        beginTime: "",
+        endTime: "",
+        activityType: "",
+        activityStatus: "",
+        activityDesc: "",
+        sort: "",
+        packageList: "",
+        conditionList: "",
+        appId: ""
       },
-      activityRules:{
+      contationData:[],
+      activityRules: {
         activityName: [
-          { required: true, message: '请输入活动组名称', trigger: 'blur' }
+          { required: true, message: "请输入活动组名称", trigger: "blur" }
         ],
-        appId: [
-          { required: true, message: '请选择所属游戏', trigger: 'change' }
-        ],
-        
+        sort: [{ required: true, message: "请输入活动排序", trigger: "blur" }],
+        beginTime: [{ validator: checkTime, trigger: "change" }],
+        endTime: [{ validator: checkTime, trigger: "change" }],
       }
     };
   },
@@ -120,31 +147,47 @@ export default Vue.extend({
     activityTabs() {
       return groupInfoModule.activityTabs;
     },
-    activityData(){
+    activityData() {
       return groupInfoModule.activityTabs[+groupInfoModule.activityTabsValue];
     },
   },
   watch: {
-    activityData(newValue){
-      this.initActivityForm(newValue);    
+    activityData(newValue) {
+      this.initActivityForm(newValue);
     }
   },
   mounted() {
-    this.initActivityForm(this.activityData);    
+    this.initActivityForm(this.activityData);
+    (this.contationData as any) = JSON.parse(JSON.stringify(ACTIVITY_CONDITION));
+    
   },
   methods: {
-    editActivity(){
+    setActivityCondition(data: any){
+      console.log("editActivityForm>>setActivityCondition>>>>>>>>>", data)
+    },
+    editActivity() {
       this.editActivityForm.appId = (this.groupList as any).activityGroupBase.activityGroup.appId;
       (this.$refs.editActivityForm as any).validate((valid: any) => {
         if (valid) {
-          groupInfoModule.editActivity(this.editActivityForm).then(() => {
-            this.$message({
-              message: "活动修改成功",
-              type: "success"
+          handleConfirm(
+            "是否确定修改" +
+              this.editActivityForm.activityName +
+              "活动配置吗 ?",
+            "warning"
+          )
+            .then(() => {
+              groupInfoModule.editActivity(this.editActivityForm).then(() => {
+                this.$message({
+                  message: this.editActivityForm.activityName + "活动修改成功",
+                  type: "success"
+                });
+              });
+            })
+            .catch(err => {
+              console.log(err);
             });
-          });
-        }else{
-          return console.log('error submit!!');
+        } else {
+          return console.log("error submit!!");
         }
       });
       // (this.$refs.groupForm2 as any).validate((valid: any) => {
@@ -152,34 +195,34 @@ export default Vue.extend({
       //     return console.log('error submit!!');
       //   }
       // });
-      // 
+      //
     },
-    initActivityForm(data: any){
-      Object.keys(this.editActivityForm).map((item: any)=>{
+    initActivityForm(data: any) {
+      Object.keys(this.editActivityForm).map((item: any) => {
         if (data) {
           const params = data[item];
-          this.$set(this.editActivityForm,item,params)
+          this.$set(this.editActivityForm, item, params);
         }
-      })
+      });
     }
   }
 });
 </script>
 <style lang="scss" scoped>
-.el-col .el-col-10{
-  &:nth-child(1){
+.el-col .el-col-10 {
+  &:nth-child(1) {
     padding: 0 !important;
   }
 }
-.form-item-tip{
+.form-item-tip {
   padding: 0 20px 20px 20px;
-    font-size: 14px;
-    font-size: 12px;
-    color: #8391a5;
-    line-height: 20px;
-    white-space: normal;
+  font-size: 14px;
+  font-size: 12px;
+  color: #8391a5;
+  line-height: 20px;
+  white-space: normal;
 }
-.change_group_btn{
+.change_group_btn {
   position: absolute;
   right: 10px;
   top: -20px;

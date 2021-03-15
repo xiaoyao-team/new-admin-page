@@ -13,7 +13,7 @@
       v-model="rewardTabsValue"
       @tab-remove="removeRewardTab"
     >
-    <!-- 活动详情 -->
+      <!-- 活动详情 -->
       <el-tab-pane :closable="false">
         <span slot="label">
           <i class="el-icon-menu"></i>活动详情
@@ -64,6 +64,7 @@ import { groupInfoModule } from "@/store/modules/groupInfo";
 import editActivityForm from "./editActivityForm.vue";
 import addRewardForm from "./addRewardForm.vue";
 import editRewardForm from "./editRewardForm.vue";
+import { handleConfirm } from "@/utils/common";
 
 export default Vue.extend({
   name: "groupInfo",
@@ -74,7 +75,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      rewardTabsValue: "0",
+      rewardTabsValue: "0"
     };
   },
   computed: {
@@ -104,17 +105,28 @@ export default Vue.extend({
         groupInfoModule.SET_REWARDTABS("del");
         this.rewardTabsValue = "0";
       } else {
-        groupInfoModule
-          .deleteActivity({
-            activityId: (this.rewardTabs[index] as any).activityId
-          })
+        handleConfirm(
+          "是否确定删除" +
+            (this.rewardTabs[index] as any).giftPackageName +
+            "礼包 ?",
+          "warning"
+        )
           .then(() => {
-            (this.rewardTabs as any).splice(index, 1);
-            this.rewardTabsValue = "0";
-            this.$message({
-              message: "礼包删除成功",
-              type: "success"
-            });
+            groupInfoModule
+              .deleteActivity({
+                activityId: (this.rewardTabs[index] as any).activityId
+              })
+              .then(() => {
+                (this.rewardTabs as any).splice(index, 1);
+                this.rewardTabsValue = "0";
+                this.$message({
+                  message: "礼包删除成功",
+                  type: "success"
+                });
+              });
+          })
+          .catch(err => {
+            console.log(err);
           });
       }
     },
