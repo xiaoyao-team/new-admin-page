@@ -128,6 +128,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { groupListModule } from "@/store/modules/groupList";
+import { groupInfoModule } from "@/store/modules/groupInfo";
 import { LoginModule } from "@/store/modules/login";
 import { handleConfirm } from "@/utils/common";
 
@@ -199,6 +200,8 @@ export default Vue.extend({
         name: "GroupInfo",
         params: { groupId: row.groupId }
       });
+      groupInfoModule.SET_ACTIVITYTABSVALUE(0)
+      groupInfoModule.SET_REWARDTABSVALUE(0)
     },
     copyGroup(index: number, row: any) {
       handleConfirm("是否确定复制" + row.groupName + "活动组 ?", "warning")

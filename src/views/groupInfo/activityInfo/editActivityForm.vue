@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <p>{{activityData}}</p> -->
     <el-row :gutter="20" style="border-bottom:1px dashed #DCDFE6">
       <el-button
         size="small"
@@ -61,7 +62,7 @@
             </el-form-item>
             <el-form-item label="活动状态 :" prop="activityStatus">
               <el-radio-group v-model="editActivityForm.activityStatus" size="medium">
-                <el-radio :label="0">创建中</el-radio>
+                <!-- <el-radio :label="0">创建中</el-radio> -->
                 <el-radio :label="1">未开始/暂停</el-radio>
                 <el-radio :label="2">进行中</el-radio>
                 <el-radio :label="3">已结束</el-radio>
@@ -144,11 +145,8 @@ export default Vue.extend({
     groupList() {
       return groupInfoModule.groupInfoData;
     },
-    activityTabs() {
-      return groupInfoModule.activityTabs;
-    },
-    activityData() {
-      return groupInfoModule.activityTabs[+groupInfoModule.activityTabsValue];
+    activityData(){
+      return groupInfoModule.activityData;
     },
   },
   watch: {

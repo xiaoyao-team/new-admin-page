@@ -29,8 +29,8 @@ export interface GroupInfoState {
 class GroupInfo extends VuexModule implements GroupInfoState {
   public groupInfoData = [];
   public activityTabs = [];
-  public activityTabsBak = [];
   public rewardTabs = [];
+  public activityTabsBak = [];
   public rewardTabsBak = [];
   public activityTabsValue = "0";
   public rewardTabsValue = "0";
@@ -38,85 +38,121 @@ class GroupInfo extends VuexModule implements GroupInfoState {
   @Mutation
   private SET_GROUPINFODATA(data: any) {
     this.groupInfoData = data;
+    (this.activityTabs as any) = [...data.activityDetailList];
   }
   @Mutation
   public SET_ACTIVITYTABSVALUE(type: any) {
-    this.activityTabsValue = type - 1 + "";
-    if ((this.activityTabsBak as any)[this.activityTabsValue]) {
-      this.rewardTabs = (this.activityTabsBak as any)[
-        this.activityTabsValue
-      ].giftPackageDetailList;
-      this.rewardTabsBak = [...this.rewardTabs];
-    } else {
-      this.rewardTabs = [];
-      this.rewardTabsBak = [];
-    }
+    this.activityTabsValue = type + "";
+    (this.rewardTabs as any) = [
+      ...(this.activityTabs as any)[this.activityTabsValue]
+        .giftPackageDetailList
+    ];
+
   }
   @Mutation
-  public SET_ACTIVITYTABS(type?: any) {
+  public SET_REWARDTABSVALUE(type: any) {
+    this.rewardTabsValue = type + "";
+  }
+  @Mutation
+  public SET_ACTIVITYTABS(type: any) {
     switch (type) {
       case "add":
         (this.activityTabs as any).push({
-          activityName: "创建中",
-          content: { name: "New Tab content" },
-          activityStatus: "0"
+          activity: {
+            activityId: "",
+            activityName: "new",
+            groupId: "",
+            beginTime: "",
+            endTime: "",
+            activityType: "",
+            activityStatus: 0,
+            activityDesc: "",
+            sort: ""
+          },
+          addNewAct: true,
+          conditionDetailList: "",
+          giftPackageList: [],
+          giftPackageDetailList: []
         });
-        return;
+        break;
       case "del":
-        this.activityTabs.splice(this.activityTabs.length - 1, 1);
-        return;
+        this.activityTabsValue = 0 + "";
+        (this.activityTabs as any).pop();
+        break;
       default:
-        this.activityTabs = [];
-        (this.groupInfoData as any).activityDetailList.map((item: any) => {
-          (this.activityTabs as any).push(
-            Object.assign(item.activity, {
-              conditionDetailList: item.conditionDetailList,
-              giftPackageDetailList: item.giftPackageDetailList,
-              giftPackageList: item.giftPackageList
-            })
-          );
-        });
-        this.activityTabsBak = [...this.activityTabs];
-        return;
+        this.activityTabs = type;
+        break;
     }
   }
   @Mutation
-  public SET_REWARDTABS(type?: any) {
+  public SET_REWARDTABS(type: any) {
     switch (type) {
       case "add":
         (this.rewardTabs as any).push({
-          activityName: "创建中",
-          content: { name: "New Tab content" },
-          rewardDtatus: "0"
+          addNewRea: true,
+          activityId: "",
+          cdkeys: "",
+          conditionList: "",
+          currentNum: 0,
+          diamondInc: 0,
+          diamondInit: 0,
+          diamondRate: 0,
+          diamondUpper: 0,
+          giftDesc: "",
+          giftPackageId: "",
+          giftPackageName: "",
+          giftPackageType: "",
+          icon: "",
+          itemNum: 0,
+          num: 0,
+          rate: 0,
+          sort: 1
         });
-        return;
+        break;
       case "del":
-        this.rewardTabs.splice(this.rewardTabs.length - 1, 1);
-        return;
+        this.rewardTabsValue = 0 + "";
+        (this.rewardTabs as any).pop();
+        break;
       default:
-        if ((this.activityTabsBak as any)[this.activityTabsValue]) {
-          this.rewardTabs = (this.activityTabsBak as any)[
-            this.activityTabsValue
-          ].giftPackageDetailList;
-          this.rewardTabsBak = [...this.rewardTabs];
-        } else {
-          this.rewardTabs = [];
-          this.rewardTabsBak = [];
-        }
-        return;
+        this.rewardTabs = type;
+        break;
     }
   }
 
   get groupId() {
     return (this.groupInfoData as any).activityGroupBase.activityGroup.groupId;
   }
+  get activityTable() {
+    return [...(this.groupInfoData as any).activityDetailList];
+  }
+  // get activityTabs() {
+  //   return (this.groupInfoData as any).activityDetailList;
+  // }
+  get activityData() {
+    const actData: any = (this.groupInfoData as any).activityDetailList[
+      this.activityTabsValue
+    ];
+    return Object.assign(actData.activity, {
+      conditionDetailList: actData.conditionDetailList,
+      giftPackageList: actData.giftPackageList,
+      giftPackageDetailList: actData.giftPackageDetailList
+    });
+  }
+  // get rewardTabs() {
+  //   return (this.groupInfoData as any).activityDetailList[
+  //     this.activityTabsValue
+  //   ].giftPackageDetailList;
+  // }
+  get rewardData() {
+    return (this.groupInfoData as any).activityDetailList[
+      this.activityTabsValue
+    ].giftPackageDetailList[this.rewardTabsValue];
+  }
 
   @Action
   public async getGroupInfo(params: object) {
     await getGroupInfo(params).then((res: any) => {
       this.SET_GROUPINFODATA(res.state);
-      this.SET_ACTIVITYTABS();
-      this.SET_REWARDTABS();
     });
   }
   @Action

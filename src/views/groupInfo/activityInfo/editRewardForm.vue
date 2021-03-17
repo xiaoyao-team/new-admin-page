@@ -18,7 +18,7 @@
             label-width="100px"
           >
             <el-form-item label="礼包ID :">
-              <span>{{rewardData.giftPackageId}}</span>
+              <span>{{rewardInfoForm.giftPackageId}}</span>
             </el-form-item>
             <el-form-item label="礼包排序 :" prop="sort">
               <el-input v-model="rewardInfoForm.sort" style="width:95%;min-width:120px"></el-input>
@@ -143,7 +143,6 @@ import ContationForm from '@/components/ContationForm.vue'
 
 export default Vue.extend({
   name: "rewardInfoForm",
-  props: ["rewardData"],
   components: {
     ContationForm
   },
@@ -190,12 +189,19 @@ export default Vue.extend({
     (this.contationData as any) = JSON.parse(JSON.stringify(REWARD_CONDITION));
 
   },
-  computed: {
-    activityData() {
-      return groupInfoModule.activityTabs[+groupInfoModule.activityTabsValue];
+  watch: {
+    rewardData(newValue) {
+      this.initRewardInfoForm();
     }
   },
-
+  computed: {
+    activityData(){
+      return groupInfoModule.activityData;
+    },
+    rewardData(){
+      return groupInfoModule.rewardData;
+    },
+  },
   methods: {
     setRewardCondition(data: any){
       console.log("editRewardForm>>>setRewardCondition>>>>>>>>>", data)
@@ -210,7 +216,7 @@ export default Vue.extend({
             if (valid) {
               groupInfoModule.editReward(this.rewardInfoForm).then(() => {
                 this.$message({
-                  message: "活动组修改成功",
+                  message: "礼包内容修改成功",
                   type: "success"
                 });
               });
@@ -230,10 +236,12 @@ export default Vue.extend({
         });
     },
     initRewardInfoForm() {
-      Object.keys(this.rewardInfoForm).map((item: any) => {
-        const params = (this.rewardData as any)[item];
-        (this.rewardInfoForm as any)[item] = params;
-      });
+      if (this.rewardData) {
+        Object.keys(this.rewardInfoForm).map((item: any) => {
+          const params = (this.rewardData as any)[item];
+          (this.rewardInfoForm as any)[item] = params;
+        });
+      }
     }
   }
 });

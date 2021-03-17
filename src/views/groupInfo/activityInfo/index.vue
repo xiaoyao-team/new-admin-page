@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <p>{{REWARDDATA}}</p> -->
     <el-button
       size="small"
       type="primary"
@@ -9,7 +10,6 @@
     >添加礼包</el-button>
     <el-tabs
       type="card"
-      style="box-shadow: -5px 5px 10px -4px rgba(0,0,0,.12), 5px 5px 10px -4px rgba(0,0,0,.04);"
       v-model="rewardTabsValue"
       @tab-remove="removeRewardTab"
     >
@@ -21,9 +21,9 @@
         <section style="padding:20px 20px 20px 20px">
           <edit-activity-form></edit-activity-form>
           <div>
-            <el-table :data="rewardTabsBak" border style="width: 100%; margin-top:20px">
+            <el-table :data="activityData.giftPackageDetailList" border style="width: 100%; margin-top:20px">
               <el-table-column prop="sort" align="center" label="序号" width="50"></el-table-column>
-              <el-table-column prop="activityId" align="center" label="礼包ID"></el-table-column>
+              <el-table-column prop="giftPackageId" align="center" label="礼包ID"></el-table-column>
               <el-table-column prop="giftPackageName" align="center" label="礼包名称"></el-table-column>
               <el-table-column prop="giftPackageType" align="center" label="礼包类型"></el-table-column>
               <el-table-column prop="num" align="center" label="礼包总数量" width="120"></el-table-column>
@@ -47,14 +47,12 @@
           <i :class="item.rewardDtatus?'act-new':'el-icon-s-goods'"></i>
           礼包-{{index+1}}
         </span>
-        <section style="padding: 20px">
-          <component
-            :is="item.rewardDtatus === '0'?'addRewardForm':'editRewardForm'"
-            :rewardData="item"
-          ></component>
-        </section>
       </el-tab-pane>
     </el-tabs>
+    <section style="box-shadow: -5px 5px 10px -4px rgba(0,0,0,.12), 5px 5px 10px -4px rgba(0,0,0,.04);padding: 20px">
+      <component v-show="rewardTabsValue!=0" :is="(activityData.giftPackageDetailList[rewardTabsValue-1]) ? 'editRewardForm':'addRewardForm'"></component>
+      <!-- <component v-show="rewardTabsValue!=0" :is="(rewardTabsValue!=0 && rewardTabs[rewardTabsValue-1].giftPackageId.length) ?'addRewardForm':'editRewardForm'"></component> -->
+    </section>
   </div>
 </template>
 
@@ -79,14 +77,18 @@ export default Vue.extend({
     };
   },
   computed: {
-    activityData() {
-      return groupInfoModule.activityTabs[+groupInfoModule.activityTabsValue];
-    },
-    rewardTabs() {
+    rewardTabs(){
       return groupInfoModule.rewardTabs;
     },
-    rewardTabsBak() {
-      return groupInfoModule.rewardTabsBak;
+    activityData(){
+      return groupInfoModule.activityData;
+    },
+  },
+  watch: {
+    rewardTabsValue(value){
+      if (value!=0) {
+        groupInfoModule.SET_REWARDTABSVALUE(value-1)
+      }
     }
   },
   methods: {
@@ -94,15 +96,16 @@ export default Vue.extend({
       console.log(index, row);
     },
     addReward() {
-      if (this.rewardTabsBak.length === this.rewardTabs.length) {
-        groupInfoModule.SET_REWARDTABS("add");
-        this.rewardTabsValue = this.rewardTabs.length + "";
+      if (this.rewardTabs.length === (this.activityData as any).giftPackageDetailList.length) {
+        groupInfoModule.SET_REWARDTABS('add')
+        this.rewardTabsValue = this.rewardTabs.length+"";
       }
+      
     },
     removeRewardTab(targetName: any) {
       const index = targetName - 1;
-      if (!this.rewardTabsBak[index]) {
-        groupInfoModule.SET_REWARDTABS("del");
+      if (!this.activityData.giftPackageDetailList[index]) {
+        groupInfoModule.SET_REWARDTABS('del')
         this.rewardTabsValue = "0";
       } else {
         handleConfirm(
@@ -113,11 +116,10 @@ export default Vue.extend({
         )
           .then(() => {
             groupInfoModule
-              .deleteActivity({
-                activityId: (this.rewardTabs[index] as any).activityId
+              .deleteReward({
+                giftPackageId: (this.activityData.giftPackageDetailList as any)[index].giftPackageId
               })
               .then(() => {
-                (this.rewardTabs as any).splice(index, 1);
                 this.rewardTabsValue = "0";
                 this.$message({
                   message: "礼包删除成功",
