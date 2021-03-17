@@ -51,7 +51,6 @@
     </el-tabs>
     <section style="box-shadow: -5px 5px 10px -4px rgba(0,0,0,.12), 5px 5px 10px -4px rgba(0,0,0,.04);padding: 20px">
       <component v-show="rewardTabsValue!=0" :is="(activityData.giftPackageDetailList[rewardTabsValue-1]) ? 'editRewardForm':'addRewardForm'"></component>
-      <!-- <component v-show="rewardTabsValue!=0" :is="(rewardTabsValue!=0 && rewardTabs[rewardTabsValue-1].giftPackageId.length) ?'addRewardForm':'editRewardForm'"></component> -->
     </section>
   </div>
 </template>

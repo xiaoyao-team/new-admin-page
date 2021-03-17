@@ -81,7 +81,9 @@
           </el-tab-pane>
         </el-tabs>
         <section style="box-shadow: -5px 5px 10px -4px rgba(0,0,0,.12), 5px 5px 10px -4px rgba(0,0,0,.04);padding: 0 20px 20px 20px">
-          <component v-show="activityTabsValue!=0" :is="groupList.activityDetailList[activityTabsValue-1] ? 'activityInfo':'addActivityForm'"></component>
+          <keep-alive include="addActivityForm">
+            <component v-show="activityTabsValue!=0" :is="groupList.activityDetailList[activityTabsValue-1] ? 'activityInfo':'addActivityForm'"></component>
+          </keep-alive>
         </section>
       </div>
     </el-card>
