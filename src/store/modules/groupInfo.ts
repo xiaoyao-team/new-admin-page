@@ -43,11 +43,12 @@ class GroupInfo extends VuexModule implements GroupInfoState {
   @Mutation
   public SET_ACTIVITYTABSVALUE(type: any) {
     this.activityTabsValue = type + "";
-    (this.rewardTabs as any) = [
-      ...(this.activityTabs as any)[this.activityTabsValue]
-        .giftPackageDetailList
-    ];
-
+    if ((this.activityTabs as any)[this.activityTabsValue]) {
+      (this.rewardTabs as any) = [
+        ...(this.activityTabs as any)[this.activityTabsValue]
+          .giftPackageDetailList
+      ];
+    }
   }
   @Mutation
   public SET_REWARDTABSVALUE(type: any) {

@@ -186,8 +186,8 @@ export default Vue.extend({
   },
   mounted () {
     this.addRewardForm.sort = (this.activityData as any).giftPackageDetailList.length+1;
-    // this.addRewardForm.activityId = (this.activityData as any).activity.activityId;
-    // (this.addRewardForm as any).groupId = (this.activityData as any).activity.groupId;
+    this.addRewardForm.activityId = (this.activityData as any).activityId;
+    (this.addRewardForm as any).groupId = (this.activityData as any).groupId;
     (this.contationData as any) = JSON.parse(JSON.stringify(REWARD_CONDITION));
   },
   computed:{

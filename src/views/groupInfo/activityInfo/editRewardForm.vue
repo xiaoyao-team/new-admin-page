@@ -190,7 +190,7 @@ export default Vue.extend({
 
   },
   watch: {
-    rewardData(newValue) {
+    rewardData() {
       this.initRewardInfoForm();
     }
   },

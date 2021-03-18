@@ -106,6 +106,14 @@ export default Vue.extend({
   computed: {
     appList() {
       return LoginModule.appList;
+    },
+    groupList() {
+      return groupInfoModule.groupInfoData;
+    },
+  },
+  watch: {
+    groupList(){
+      this.initGroupForm();
     }
   },
   mounted() {
@@ -143,7 +151,7 @@ export default Vue.extend({
     },
     initGroupForm() {
       Object.keys(this.groupForm).map((item: any) => {
-        const params = (groupInfoModule.groupInfoData as any).activityGroupBase
+        const params = (this.groupList as any).activityGroupBase
           .activityGroup[item];
         (this.groupForm as any)[item] = params;
       });
