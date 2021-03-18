@@ -42,10 +42,10 @@
         :name="(index+1+'')"
         :closable="true"
       >
-        <span slot="label" :title="item.rewardDtatus">
+        <span slot="label" >
           <!-- 1:进行中; -1:创建中; 2:已结束, 0:暂停/未开始 -->
-          <i :class="item.rewardDtatus?'act-new':'el-icon-s-goods'"></i>
-          礼包-{{index+1}}
+          <i :class="item.addNewRea?'act-new':'el-icon-s-goods'"></i>
+          {{item.sort?'礼包-'+item.sort:'新礼包'}}
         </span>
       </el-tab-pane>
     </el-tabs>

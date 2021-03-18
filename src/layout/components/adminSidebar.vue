@@ -46,7 +46,14 @@ export default Vue.extend({
   computed: {
     routes() {
       return routes;
-    }
+    },
+  },
+  mounted () {
+    (routes as any)[2].children.map((item: any,index: any)=>{
+      if (item.name === this.$route.name) {
+        this.activeIndex =  (index<5?index:0)+'';
+      }
+    })
   }
 });
 </script>

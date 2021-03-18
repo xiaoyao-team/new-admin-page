@@ -76,7 +76,7 @@
             <span slot="label" :title="item.activity.activityStatus">
               <!-- 0:创建中; 1:未开始/暂停; 2:进行中, 3:已结束 -->
               <i :class="'act-status'+item.activity.activityStatus"></i>
-              活动-{{index+1}}({{item.activity.activityName}})
+              {{item.activity.sort?'活动-'+item.activity.sort+'('+item.activity.activityName+')':'新活动'}}
             </span>
           </el-tab-pane>
         </el-tabs>

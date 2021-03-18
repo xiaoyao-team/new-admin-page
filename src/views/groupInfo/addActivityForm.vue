@@ -144,9 +144,7 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.addActivityForm.sort = this.activityTabs.length;
     (this.contationData as any) = JSON.parse(JSON.stringify(ACTIVITY_CONDITION));
-
   },
   computed: {
     groupList() {
@@ -156,7 +154,11 @@ export default Vue.extend({
       return groupInfoModule.activityTabs;
     }
   },
-
+  watch: {
+    activityTabs(newValue){
+      this.addActivityForm.sort = newValue.length;
+    }
+  },
   methods: {
     setActivityCondition(data: any){
       console.log("addActivityForm>>>setActivityCondition>>>>>>>>>", data)
@@ -173,6 +175,9 @@ export default Vue.extend({
               message: "新活动添加成功",
               type: "success"
             });
+            setTimeout(() => {
+              (this.$refs.addActivityForm as any).resetFields();            
+            }, 500);
           });
         } else {
           return console.log("error submit!!");

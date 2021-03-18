@@ -30,8 +30,6 @@ class GroupInfo extends VuexModule implements GroupInfoState {
   public groupInfoData = [];
   public activityTabs = [];
   public rewardTabs = [];
-  public activityTabsBak = [];
-  public rewardTabsBak = [];
   public activityTabsValue = "0";
   public rewardTabsValue = "0";
 
@@ -39,6 +37,12 @@ class GroupInfo extends VuexModule implements GroupInfoState {
   private SET_GROUPINFODATA(data: any) {
     this.groupInfoData = data;
     (this.activityTabs as any) = [...data.activityDetailList];
+    if ((this.activityTabs as any)[this.activityTabsValue]) {
+      (this.rewardTabs as any) = [
+        ...(this.activityTabs as any)[this.activityTabsValue]
+          .giftPackageDetailList
+      ];
+    }
   }
   @Mutation
   public SET_ACTIVITYTABSVALUE(type: any) {
@@ -107,7 +111,6 @@ class GroupInfo extends VuexModule implements GroupInfoState {
           itemNum: 0,
           num: 0,
           rate: 0,
-          sort: 1
         });
         break;
       case "del":

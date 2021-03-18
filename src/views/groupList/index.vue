@@ -55,7 +55,7 @@
             style="width: 100%"
             :default-sort="{prop: 'createTime', order: 'descending'}"
           >
-            <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
+            <el-table-column type="index" align="center"  width="50"></el-table-column>
             <el-table-column prop="groupId" align="center" label="活动组ID"></el-table-column>
             <el-table-column prop="groupName" label="活动组名称"></el-table-column>
             <el-table-column prop="appName" align="center" label="所属游戏" width="120"></el-table-column>
