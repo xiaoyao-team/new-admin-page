@@ -129,28 +129,53 @@ class GroupInfo extends VuexModule implements GroupInfoState {
   get activityTable() {
     return [...(this.groupInfoData as any).activityDetailList];
   }
-  // get activityTabs() {
-  //   return (this.groupInfoData as any).activityDetailList;
-  // }
   get activityData() {
-    const actData: any = (this.groupInfoData as any).activityDetailList[
-      this.activityTabsValue
-    ];
-    return Object.assign(actData.activity, {
-      conditionDetailList: actData.conditionDetailList,
-      giftPackageList: actData.giftPackageList,
-      giftPackageDetailList: actData.giftPackageDetailList
-    });
+    const actData: any = (this.groupInfoData as any).activityDetailList[this.activityTabsValue];
+    if (actData) {
+      return Object.assign(actData.activity, {
+        conditionDetailList: actData.conditionDetailList,
+        giftPackageList: actData.giftPackageList,
+        giftPackageDetailList: actData.giftPackageDetailList
+      });
+    } else {
+      return {
+        "activityId": "",
+        "activityName": "",
+        "groupId": "",
+        "beginTime": "",
+        "endTime": "",
+        "activityType": 0,
+        "activityStatus": 0,
+        "activityDesc": "",
+        "sort": 0,
+        "conditionDetailList": "",
+        "giftPackageList": [],
+        "giftPackageDetailList": [],
+      };
+    }
   }
-  // get rewardTabs() {
-  //   return (this.groupInfoData as any).activityDetailList[
-  //     this.activityTabsValue
-  //   ].giftPackageDetailList;
-  // }
   get rewardData() {
-    return (this.groupInfoData as any).activityDetailList[
-      this.activityTabsValue
-    ].giftPackageDetailList[this.rewardTabsValue];
+    if ((this.groupInfoData as any).activityDetailList[this.activityTabsValue]) {
+      return (this.groupInfoData as any).activityDetailList[
+        this.activityTabsValue
+      ].giftPackageDetailList[this.rewardTabsValue];
+    } else {
+      return {
+        "activityId": "",
+        "activityName": "",
+        "groupId": "",
+        "beginTime": "",
+        "endTime": "",
+        "activityType": 0,
+        "activityStatus": 0,
+        "activityDesc": "",
+        "sort": "",
+        "conditionDetailList": "",
+        "giftPackageList": [],
+        "giftPackageDetailList": []
+      };
+    }
+    
   }
 
   @Action

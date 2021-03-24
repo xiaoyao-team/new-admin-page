@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <p>{{REWARDDATA}}</p> -->
     <el-button
       size="small"
       type="primary"
@@ -50,7 +49,9 @@
       </el-tab-pane>
     </el-tabs>
     <section style="box-shadow: -5px 5px 10px -4px rgba(0,0,0,.12), 5px 5px 10px -4px rgba(0,0,0,.04);padding: 20px">
-      <component v-show="rewardTabsValue!=0" :is="(activityData.giftPackageDetailList[rewardTabsValue-1]) ? 'editRewardForm':'addRewardForm'"></component>
+      <edit-reward-form  v-show="rewardTabsValue!=0 && activityData.giftPackageDetailList[rewardTabsValue-1]"></edit-reward-form>
+      <add-reward-form  v-show="rewardTabsValue!=0 && !activityData.giftPackageDetailList[rewardTabsValue-1]"></add-reward-form>
+      <!-- <component :is="(rewardTabsValue!=0 && activityData.giftPackageDetailList[rewardTabsValue-1]) ? 'editRewardForm':'addRewardForm'"></component> -->
     </section>
   </div>
 </template>
