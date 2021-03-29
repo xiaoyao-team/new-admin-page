@@ -47,17 +47,17 @@ export const routes: Array<RouteConfig> = [
       //     zhName: "添加活动"
       //   }
       // },
-      {
-        path: "/main/awardQuery",
-        component: () => import("@/views/awardQuery/index.vue"),
-        name: "AwardQuery",
-        meta: {
-          title: "awardQuery",
-          icon: "el-icon-search",
-          affix: true,
-          zhName: "获奖查询"
-        }
-      },
+      // {
+      //   path: "/main/awardQuery",
+      //   component: () => import("@/views/awardQuery/index.vue"),
+      //   name: "AwardQuery",
+      //   meta: {
+      //     title: "awardQuery",
+      //     icon: "el-icon-search",
+      //     affix: true,
+      //     zhName: "获奖查询"
+      //   }
+      // },
       {
         path: "/main/activityTool",
         component: () => import("@/views/activityTool/index.vue"),
@@ -78,7 +78,8 @@ export const routes: Array<RouteConfig> = [
           icon: "el-icon-reading",
           affix: true,
           zhName: "创建apk页面"
-        }
+        },
+        
       },
       {
         path: "/main/uploadDocs",

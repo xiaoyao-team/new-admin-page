@@ -156,16 +156,14 @@ export default Vue.extend({
       
     }
   },
-  watch: {
-    // "contationData":{
+  // watch: {
+  //   "contationData":{
       // handler(newValue,oldValue){
-      //   if (!oldValue.length) {
-      //     this.$emit('setCondition',newValue)
-      //   }
+      //   this.$emit('setCondition',newValue)
       // },
       // deep: true
-    // }
-  },
+  //   }
+  // },
   methods: {
     handleChange(index: any){
       this.$set(this.contationData[index], 'checked', true);

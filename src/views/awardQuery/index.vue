@@ -181,7 +181,8 @@ export default Vue.extend({
       return groupListModule.groupList;
     },
     activityTabs(){
-      return groupInfoModule.activityTabs.map((item: any)=>item.activity);
+      // return groupInfoModule.activityTabs.map((item: any)=>item.activity);
+      return groupInfoModule.activityTabs;
     },
   },
   watch: {

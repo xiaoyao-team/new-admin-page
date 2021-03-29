@@ -151,7 +151,6 @@ export default Vue.extend({
   },
   watch: {
     activityData(newValue) {
-      console.log(newValue)
       this.initActivityForm(newValue);
     }
   },
