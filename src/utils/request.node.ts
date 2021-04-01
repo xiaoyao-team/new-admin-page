@@ -2,10 +2,8 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import { Loading } from "element-ui";
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_BASE_API,
-  // baseURL: "http://172.16.10.103:3000/",
-  // baseURL: "http://172.16.3.171:9002/",
-  baseURL: '/dev-api',
+  baseURL: process.env.VUE_APP_BASE_API_NODE,
+  // baseURL: '/dev-api',
   timeout: 5000
 });
 const options = {
