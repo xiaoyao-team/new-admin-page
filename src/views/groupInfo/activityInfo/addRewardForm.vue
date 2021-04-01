@@ -126,11 +126,11 @@
         </div>
       </el-col>
       <!-- right -->
-      <el-col :span="14"  style="border-left:1px dashed #DCDFE6;">
+      <!-- <el-col :span="14"  style="border-left:1px dashed #DCDFE6;">
         <div class="grid-content bg-purple">
           <contation-form :contationData='contationData' @setCondition='setRewardCondition'></contation-form>
         </div>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
@@ -138,11 +138,11 @@
 import Vue from "vue";
 import { groupInfoModule } from "@/store/modules/groupInfo";
 import {REWARD_CONDITION} from '../index';
-import ContationForm from '@/components/ContationForm.vue'
+// import ContationForm from '@/components/ContationForm.vue'
 export default Vue.extend({
   name: "addRewardForm",
   components: {
-    ContationForm
+    // ContationForm
   },
   data() {
     return {
@@ -184,17 +184,20 @@ export default Vue.extend({
       }
     };
   },
-  mounted () {
-    this.addRewardForm.sort = (this.activityData as any).giftPackageDetailList.length+1;
-    this.addRewardForm.activityId = (this.activityData as any).activityId;
-    (this.addRewardForm as any).groupId = (this.activityData as any).groupId;
-    (this.contationData as any) = JSON.parse(JSON.stringify(REWARD_CONDITION));
-  },
   computed:{
     activityData(){
       return groupInfoModule.activityData;
     },
   },
+  watch: {
+    activityData(newValue) {
+      this.addRewardForm.sort = (newValue as any).giftPackageDetailList.length+1;
+      this.addRewardForm.activityId = (newValue as any).activityId;
+      (this.addRewardForm as any).groupId = (newValue as any).groupId;
+      (this.contationData as any) = JSON.parse(JSON.stringify(REWARD_CONDITION));
+    }
+  },
+  
   methods: {
     setRewardCondition(data: any){
       console.log("editRewardForm>>>setRewardCondition>>>>>>>>>", data)
@@ -217,6 +220,7 @@ export default Vue.extend({
               message: "新礼包添加成功",
               type: "success"
             });
+            (this.$refs.addRewardForm as any).resetFields();
           });
         } else {
           return console.log("error submit!!");

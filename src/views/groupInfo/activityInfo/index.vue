@@ -76,6 +76,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    activityTabsValue(){
+      return groupInfoModule.activityTabsValue;
+    },
     rewardTabs(){
       return groupInfoModule.rewardTabs;
     },
@@ -84,6 +87,9 @@ export default Vue.extend({
     },
   },
   watch: {
+    activityTabsValue(){
+      this.rewardTabsValue = '0';
+    },
     rewardTabsValue(value){
       if (value!=0) {
         groupInfoModule.SET_REWARDTABSVALUE(value-1)

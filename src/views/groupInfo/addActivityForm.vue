@@ -18,7 +18,7 @@
             label-width="100px"
           >
             <el-form-item label="活动组ID :">
-              <span>{{groupList.activityGroupBase.activityGroup.groupId}}</span>
+              <span>{{$route.params.groupId}}</span>
             </el-form-item>
             <el-form-item label="活动名称 :" prop="activityName">
               <el-input v-model="addActivityForm.activityName" style="width:90%;min-width:120px"></el-input>
@@ -81,11 +81,11 @@
         </div>
       </el-col>
       <!-- right -->
-      <el-col :span="14"  style="border-left:1px dashed #DCDFE6;">
+      <!-- <el-col :span="14"  style="border-left:1px dashed #DCDFE6;">
         <div class="grid-content bg-purple">
           <contation-forms :contationData='contationData' @setCondition='setActivityCondition'></contation-forms>
         </div>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
@@ -93,12 +93,12 @@
 import Vue from "vue";
 import { groupInfoModule } from "@/store/modules/groupInfo";
 import { ACTIVITY_CONDITION } from './index'
-import ContationForms from '@/components/ContationForm.vue'
+// import ContationForms from '@/components/ContationForm.vue'
 
 export default Vue.extend({
   name: "addActivityForm",
   components: {
-    ContationForms
+    // ContationForms
   },
   data() {
     const checkTime = (rule: any, value: any, callback: any) => {

@@ -18,24 +18,44 @@ import {
 } from "@/api/users";
 
 export interface GroupInfoState {
-  groupInfoData: any; // 活动组数据
-  activityTabs: any; // 活动tab数据
-  activityTabsValue: string; //活动tab下标
-  rewardTabs: any; //礼包tab数据
-  rewardTabsValue: string; //礼包tab下标
+  /**
+   * groupId: 活动组ID
+   * groupName: 活动组名称
+   * groupInfoData: 活动组数据
+   * activityTabs: 活动Tabs
+   * activityTable: 活动数据
+   * activityTable: 活动数据
+   * activityTabsValue: 活动Tabs下标
+   * rewardTabs: 礼包Tabs
+   * rewardTabsValue: 礼包Tabs下标
+   * */
+  groupId: string;
+  groupName: string;
+  groupInfoData: any;
+  activityTabs: any;
+  activityTable: any;
+  activityTabsValue: string;
+  rewardTabs: any;
+  rewardTabsValue: string;
 }
 
 @Module({ dynamic: true, store, name: "groupInfo" })
 class GroupInfo extends VuexModule implements GroupInfoState {
+  public groupId = "";
+  public groupName = "";
   public groupInfoData = [];
   public activityTabs = [];
-  public rewardTabs = [];
+  public activityTable = [];
   public activityTabsValue = "0";
+  public rewardTabs = [];
   public rewardTabsValue = "0";
 
   @Mutation
   private SET_GROUPINFODATA(data: any) {
     this.groupInfoData = data;
+    this.groupId = data.activityGroupBase.activityGroup.groupId;
+    this.groupName = data.activityGroupBase.activityGroup.groupName;
+    (this.activityTable as any) = [...data.activityDetailList];
     (this.activityTabs as any) = [...data.activityDetailList];
     if ((this.activityTabs as any)[this.activityTabsValue]) {
       (this.rewardTabs as any) = [
@@ -110,7 +130,7 @@ class GroupInfo extends VuexModule implements GroupInfoState {
           icon: "",
           itemNum: 0,
           num: 0,
-          rate: 0,
+          rate: 0
         });
         break;
       case "del":
@@ -122,15 +142,8 @@ class GroupInfo extends VuexModule implements GroupInfoState {
         break;
     }
   }
-
-  get groupId() {
-    return (this.groupInfoData as any).activityGroupBase.activityGroup.groupId;
-  }
-  get activityTable() {
-    return [...(this.groupInfoData as any).activityDetailList];
-  }
   get activityData() {
-    const actData: any = (this.groupInfoData as any).activityDetailList[this.activityTabsValue];
+    const actData: any = this.activityTable[this.activityTabsValue as any];
     if (actData) {
       return Object.assign(actData.activity, {
         conditionDetailList: actData.conditionDetailList,
@@ -139,43 +152,48 @@ class GroupInfo extends VuexModule implements GroupInfoState {
       });
     } else {
       return {
-        "activityId": "",
-        "activityName": "",
-        "groupId": "",
-        "beginTime": "",
-        "endTime": "",
-        "activityType": 0,
-        "activityStatus": 0,
-        "activityDesc": "",
-        "sort": 0,
-        "conditionDetailList": "",
-        "giftPackageList": [],
-        "giftPackageDetailList": [],
+        activityId: "",
+        activityName: "",
+        groupId: "",
+        beginTime: "",
+        endTime: "",
+        activityType: 0,
+        activityStatus: 0,
+        activityDesc: "",
+        sort: 0,
+        conditionDetailList: "",
+        giftPackageList: [],
+        giftPackageDetailList: []
       };
     }
   }
   get rewardData() {
-    if ((this.groupInfoData as any).activityDetailList[this.activityTabsValue]) {
+    const actData: any = this.activityTable[this.activityTabsValue as any];
+    if (actData) {
       return (this.groupInfoData as any).activityDetailList[
         this.activityTabsValue
       ].giftPackageDetailList[this.rewardTabsValue];
     } else {
       return {
-        "activityId": "",
-        "activityName": "",
-        "groupId": "",
-        "beginTime": "",
-        "endTime": "",
-        "activityType": 0,
-        "activityStatus": 0,
-        "activityDesc": "",
-        "sort": "",
-        "conditionDetailList": "",
-        "giftPackageList": [],
-        "giftPackageDetailList": []
+        activityId: "",
+        cdkeys: "",
+        conditionList: "",
+        currentNum: 0,
+        diamondInc: 0,
+        diamondInit: 0,
+        diamondRate: 0,
+        diamondUpper: 0,
+        giftDesc: "1",
+        giftPackageId: "",
+        giftPackageName: "",
+        giftPackageType: "",
+        icon: "",
+        itemNum: 0,
+        num: 0,
+        rate: 0,
+        sort: 0
       };
     }
-    
   }
 
   @Action

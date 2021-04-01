@@ -1,19 +1,19 @@
 <template>
   <div>
-    <el-card v-if="groupList.activityGroupBase">
-      <!-- <p>{{activityTabs}}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></p>
-      <hr>
-      <p>{{activityData}}</p>
-      <hr>
-      <p>{{rewardTabs}}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></p>
-      <hr>
-      <p>{{rewardData}}</p> -->
-      
+    <el-card>
+      <!-- <p>{{groupList}}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></p> -->
+      <!-- <hr> -->
+      <!-- <p>{{activityData}}</p> -->
+      <!-- <hr> -->
+      <!-- <p>{{rewardTabs}}>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>></p> -->
+      <!-- <hr> -->
+      <!-- <p>{{rewardData}}</p> -->
+
       <div slot="header">
         <el-page-header
           @back="goBack"
           title="返回"
-          :content="'活动配置 ( '+groupList.activityGroupBase.activityGroup.groupName+' )'"
+          :content="'活动配置 ( '+groupName+' )'"
         ></el-page-header>
       </div>
       <div>
@@ -24,11 +24,7 @@
           class="el-tabs__new-tab el-icon-plus"
           @click="addTab(activityTabsValue)"
         >添加活动</el-button>
-        <el-tabs
-          type="card"
-          v-model="activityTabsValue"
-          @tab-remove="removeActivityTab"
-        >
+        <el-tabs type="card" v-model="activityTabsValue" @tab-remove="removeActivityTab">
           <!-- 活动组信息 -->
           <el-tab-pane :closable="false">
             <span slot="label">
@@ -46,12 +42,20 @@
                       <div>{{scope.row.activity.beginTime}} - {{scope.row.activity.endTime}}</div>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="activity.activityType" align="center" label="活动类型" width="120"></el-table-column>
-                  <el-table-column prop="activity.activityStatus" align="center" label="活动状态" width="120"></el-table-column>
+                  <el-table-column
+                    prop="activity.activityType"
+                    align="center"
+                    label="活动类型"
+                    width="120"
+                  ></el-table-column>
+                  <el-table-column
+                    prop="activity.activityStatus"
+                    align="center"
+                    label="活动状态"
+                    width="120"
+                  ></el-table-column>
                   <el-table-column label="礼包数量" align="center" width="100">
-                    <template
-                      slot-scope="scope"
-                    >{{scope.row.giftPackageList.length}}</template>
+                    <template slot-scope="scope">{{scope.row.giftPackageList.length}}</template>
                   </el-table-column>
                   <el-table-column label="操作" align="center" width="150">
                     <template slot-scope="scope">
@@ -80,9 +84,13 @@
             </span>
           </el-tab-pane>
         </el-tabs>
-        <section style="box-shadow: -5px 5px 10px -4px rgba(0,0,0,.12), 5px 5px 10px -4px rgba(0,0,0,.04);padding: 0 20px 20px 20px">
-            <activity-info v-show="activityTabsValue!=0 && groupList.activityDetailList[activityTabsValue-1]"></activity-info>
-            <add-activity-form v-show="activityTabsValue!=0 && !groupList.activityDetailList[activityTabsValue-1]"></add-activity-form>
+        <section class="content">
+          <activity-info
+            v-show="activityTabsValue!=0 && groupList.activityDetailList[activityTabsValue-1]"
+          ></activity-info>
+          <add-activity-form
+            v-show="activityTabsValue!=0 && !groupList.activityDetailList[activityTabsValue-1]"
+          ></add-activity-form>
         </section>
       </div>
     </el-card>
@@ -112,10 +120,10 @@ export default Vue.extend({
   created() {
     groupInfoModule.getGroupInfo({ groupId: this.$route.params.groupId });
   },
-  watch:{
-    activityTabsValue(value){
-      if (value!=0) {
-        groupInfoModule.SET_ACTIVITYTABSVALUE(value-1)
+  watch: {
+    activityTabsValue(value) {
+      if (value != 0) {
+        groupInfoModule.SET_ACTIVITYTABSVALUE(value - 1);
       }
     }
   },
@@ -123,37 +131,43 @@ export default Vue.extend({
     groupList() {
       return groupInfoModule.groupInfoData;
     },
-    activityTabs(){
+    groupName() {
+      return groupInfoModule.groupName;
+    },
+    activityTabs() {
       return groupInfoModule.activityTabs;
     },
-    activityTable(){
+    activityTable() {
       return groupInfoModule.activityTable;
     },
-    rewardTabs(){
+    rewardTabs() {
       return groupInfoModule.rewardTabs;
     },
-    activityData(){
-      return groupInfoModule.activityData;
-    },
-    rewardData(){
-      return groupInfoModule.rewardData;
-    },
+    // activityData() {
+    //   return groupInfoModule.activityData;
+    // },
+    // rewardData() {
+    //   return groupInfoModule.rewardData;
+    // }
   },
   methods: {
     clearActivityData(index: any, row: any) {
       console.log(index, row);
     },
     addTab() {
-      if (this.activityTabs.length === (this.groupList as any).activityDetailList.length) {
-        groupInfoModule.SET_ACTIVITYTABS('add')
-        this.activityTabsValue = this.activityTabs.length+"";
+      if (
+        this.activityTabs.length ===
+        (this.groupList as any).activityDetailList.length
+      ) {
+        groupInfoModule.SET_ACTIVITYTABS("add");
+        this.activityTabsValue = this.activityTabs.length + "";
       }
     },
     removeActivityTab(targetName: any) {
-      const index = targetName-1;
+      const index = targetName - 1;
       if (!(this.groupList as any).activityDetailList[index]) {
         this.activityTabsValue = "0";
-        groupInfoModule.SET_ACTIVITYTABS('del')
+        groupInfoModule.SET_ACTIVITYTABS("del");
       } else {
         handleConfirm(
           "是否确定删除" +
@@ -164,7 +178,8 @@ export default Vue.extend({
           .then(() => {
             groupInfoModule
               .deleteActivity({
-                activityId: (this.activityTabs[index] as any).activity.activityId
+                activityId: (this.activityTabs[index] as any).activity
+                  .activityId
               })
               .then(() => {
                 (this.activityTabs as any).splice(index, 1);
@@ -193,6 +208,11 @@ export default Vue.extend({
   height: auto;
   position: relative;
   z-index: 1;
+}
+.content {
+  box-shadow: -5px 5px 10px -4px rgba(0, 0, 0, 0.12),
+    5px 5px 10px -4px rgba(0, 0, 0, 0.04);
+  padding: 0 20px 20px 20px;
 }
 
 .act-status0,

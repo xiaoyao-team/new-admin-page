@@ -117,7 +117,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    this.initGroupForm();
+    // this.initGroupForm();
   },
   methods: {
     editGrop() {
@@ -151,9 +151,10 @@ export default Vue.extend({
     },
     initGroupForm() {
       Object.keys(this.groupForm).map((item: any) => {
-        const params = (this.groupList as any).activityGroupBase
-          .activityGroup[item];
-        (this.groupForm as any)[item] = params;
+        if ((this.groupList as any).activityGroupBase) {
+          const params = (this.groupList as any).activityGroupBase.activityGroup[item];
+          (this.groupForm as any)[item] = params;
+        }
       });
     }
   }
