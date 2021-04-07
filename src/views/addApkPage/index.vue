@@ -12,7 +12,7 @@ import Vue from 'vue'
 import ApkPageList from './apkPageList.vue'
 import AddApkPage from './addApkPage.vue'
 import editApkPage from './editApkPage.vue'
-import {COPY} from '@/api/addApk.ts'
+// import {COPY} from '@/api/addApk.ts'
 export default Vue.extend({
   components:{
     editApkPage,
