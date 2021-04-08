@@ -151,11 +151,13 @@ export default Vue.extend({
   },
   watch: {
     activityData(newValue) {
-      this.initActivityForm(newValue);
+      if (newValue) {
+        this.initActivityForm(newValue);
+      }
     }
   },
   mounted() {
-    this.initActivityForm(this.activityData);
+    // this.initActivityForm(this.activityData);
     (this.contationData as any) = JSON.parse(JSON.stringify(ACTIVITY_CONDITION));
     
   },

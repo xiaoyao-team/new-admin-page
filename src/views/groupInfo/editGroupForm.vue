@@ -112,12 +112,11 @@ export default Vue.extend({
     },
   },
   watch: {
-    groupList(){
-      this.initGroupForm();
+    groupList(newValue){
+      if (newValue) {
+        this.initGroupForm();
+      }
     }
-  },
-  mounted() {
-    // this.initGroupForm();
   },
   methods: {
     editGrop() {

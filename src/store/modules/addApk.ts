@@ -19,7 +19,7 @@ export interface AddApkState {
   defaultData: object;
 }
 
-@Module({ dynamic: true, store, name: "groupInfo" })
+@Module({ dynamic: true, store, name: "addApk" })
 class AddApk extends VuexModule implements AddApkState {
   public apkPageData = [];
   public defaultData = {};

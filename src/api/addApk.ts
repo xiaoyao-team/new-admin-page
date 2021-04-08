@@ -40,11 +40,3 @@ export  const updateApkPage =  (data: any) => {
       data: qs.stringify(data)
     });
   }
-
-  export function COPY(data?: any) {
-    return request({
-      url: "/copy",
-      method: "post",
-      data: qs.stringify(data)
-    });
-  }

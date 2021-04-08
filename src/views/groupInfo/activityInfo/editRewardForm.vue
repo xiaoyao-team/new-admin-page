@@ -185,13 +185,15 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.initRewardInfoForm();
+    // this.initRewardInfoForm();
     (this.contationData as any) = JSON.parse(JSON.stringify(REWARD_CONDITION));
 
   },
   watch: {
-    rewardData() {
-      this.initRewardInfoForm();
+    rewardData(newValue) {
+      if (newValue) {
+        this.initRewardInfoForm();
+      }
     }
   },
   computed: {
