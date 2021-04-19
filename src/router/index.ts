@@ -77,9 +77,8 @@ export const routes: Array<RouteConfig> = [
           title: "addApkPage",
           icon: "el-icon-reading",
           affix: true,
-          zhName: "创建apk页面"
-        },
-        
+          zhName: "配置apk页面"
+        }
       },
       {
         path: "/main/uploadDocs",
@@ -91,7 +90,8 @@ export const routes: Array<RouteConfig> = [
           affix: true,
           zhName: "更新日志"
         }
-      },{
+      },
+      {
         path: "/main/groupInfo/:groupId",
         name: "GroupInfo",
         component: () => import("@/views/groupInfo/index.vue"),
@@ -100,10 +100,15 @@ export const routes: Array<RouteConfig> = [
           icon: "el-icon-circle-plus-outline",
           affix: false,
           zhName: "活动详情"
-        },
-      },
+        }
+      }
     ]
-  }
+  },
+  {
+    path: "/404",
+    component: () => import("@/views/404/index.vue")
+  },
+  { path: "*", redirect: "/404" },
 ];
 
 const router = new VueRouter({

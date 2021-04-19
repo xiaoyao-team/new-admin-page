@@ -166,6 +166,7 @@ export default Vue.extend({
       console.log("editActivityForm>>setActivityCondition>>>>>>>>>", data)
     },
     editActivity() {
+      console.log(this.contationData)
       this.editActivityForm.appId = (this.groupList as any).activityGroupBase.activityGroup.appId;
       (this.$refs.editActivityForm as any).validate((valid: any) => {
         if (valid) {

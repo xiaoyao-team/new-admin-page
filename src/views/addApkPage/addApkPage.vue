@@ -107,7 +107,7 @@ import { addApkModule } from "@/store/modules/addApk";
 import { uploadImgToBase64 } from '@/utils/common'
 import md5 from "js-md5";
 export default Vue.extend({
-  name: "Dashboard",
+  name: "addApkPage",
   data() {
     return {
       pcImageUrl: "",
