@@ -2,30 +2,24 @@
   <div class="sidebar">
     <!-- <el-scrollbar wrap-class="scrollbar-wrapper"> -->
     <el-menu
-      :default-active="activeIndex"
+      :default-active="$route.path"
       class="el-menu-vertical-demo"
       background-color="#329fea"
       text-color="#F2F6FC"
       active-text-color="#fff"
       style="border: none;"
+      router
     >
       <el-menu-item
         v-show="item.meta.affix"
-        v-for="(item,index) in routes[2].children"
-        :index="index.toString()"
+        v-for="(item,index) in routes.children"
+        :index="item.path"
         :key="index"
       >
-        <router-link
-          v-if="item.name!='GroupInfo'"
-          class="sidebar-item"
-          :to="{name:item.name}"
-          :key="item.name"
-        >
-          <div class="item-content">
-            <i style="margin: 0 10px;" :class="item.meta.icon"></i>
-            <span class="item-text">{{item.meta.zhName}}</span>
-          </div>
-        </router-link>
+        <div class="item-content">
+          <i style="margin: 0 10px;" :class="item.meta.icon"></i>
+          <span class="item-text">{{item.meta.zhName}}</span>
+        </div>
       </el-menu-item>
     </el-menu>
     <!-- </el-scrollbar> -->
@@ -40,21 +34,13 @@ export default Vue.extend({
   name: "adminSidebar",
   data() {
     return {
-      activeIndex: "0"
     };
   },
   computed: {
     routes() {
-      return routes;
+      return routes[2];
     },
   },
-  mounted () {
-    (routes as any)[2].children.map((item: any,index: any)=>{
-      if (item.name === this.$route.name) {
-        this.activeIndex =  (index<5?index:0)+'';
-      }
-    })
-  }
 });
 </script>
 

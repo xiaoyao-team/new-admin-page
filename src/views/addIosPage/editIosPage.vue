@@ -2,71 +2,59 @@
   <div>
     <el-card>
       <div slot="header">
-        <el-page-header @back="goBack" title="返回" content="新增落地页参数"></el-page-header>
+        <el-page-header
+          @back="goBack"
+          title="返回"
+          content="修改落地页参数"
+        ></el-page-header>
       </div>
-      <el-form ref="addForm" :model="addForm" label-width="150px">
+      <el-form ref="changeForm" :model="changeForm" label-width="150px">
         <el-form-item
-          label="游戏"
+          label="游戏名称"
           prop="appId"
-          :rules="{ required: true, message: '请选择所属游戏', trigger: 'change'}"
+          :rules="{ required: true, message: '游戏ID不能为空'}"
         >
-          <el-select v-model="addForm.appId" placeholder="请选择">
-            <el-option
-              v-for="item in appList"
-              :key="item.value"
-              :label="item.appName"
-              :value="item.appId"
-            ></el-option>
-          </el-select>
+          <el-input v-model="changeForm.appName" disabled />
         </el-form-item>
-        <el-form-item label="页面名称" prop="pageTitle" :rules="{ required: true, message: '页面名称不能为空'}">
-          <el-input v-model="addForm.pageTitle" />
-        </el-form-item>
-        <el-form-item label="生成路径" prop="filePath" :rules="{ required: true, message: '路径不能为空'}">
-          <el-input v-model="addForm.filePath" />
+        <el-form-item
+          label="页面名称"
+          prop="pageTitle"
+          :rules="{ required: true, message: '页面名称不能为空'}"
+        >
+          <el-input v-model="changeForm.pageTitle" />
         </el-form-item>
         <el-form-item
           label="网页title"
           prop="webTitle"
           :rules="{ required: true, message: '网页title不能为空'}"
         >
-          <el-input v-model="addForm.webTitle" />
+          <el-input v-model="changeForm.webTitle" />
         </el-form-item>
         <el-form-item
-          label="下载按钮链接"
-          prop="buttonLink"
-          :rules="{ required: true, message: '下载链接不能为空'}"
+          label="ios跳转链接"
+          prop="iosLink"
+          :rules="{ required: true, message: 'ios跳转链接不能为空'}"
         >
-          <el-input v-model="addForm.buttonLink" />
+          <el-input v-model="changeForm.iosLink" />
         </el-form-item>
         <el-form-item
-          label="下载按钮文本"
-          prop="buttonTxt"
-          :rules="{ required: true, message: '按钮文本不能为空'}"
+          label="android跳转链接"
+          prop="androidLink"
+          :rules="{ required: true, message: 'android跳转链接不能为空'}"
         >
-          <el-input v-model="addForm.buttonTxt" />
+          <el-input v-model="changeForm.androidLink" />
         </el-form-item>
-        <!-- <el-form-item
+        <el-form-item
           label="对应页面地址"
-          prop="address"
+          prop="androidLink"
           :rules="{ required: true, message: '对应页面地址不能为空'}"
         >
-          <el-input v-model="addForm.address" />
-        </el-form-item> -->
-        <el-form-item label="版本说明title">
-          <el-input v-model="addForm.versionTitle" />
+          <el-input v-model="changeForm.address" />
         </el-form-item>
-        <el-form-item label="版本说明描述">
-          <el-input v-model="addForm.versionDesc"  type="textarea" :autosize="{ minRows: 2, maxRows: 6}"/>
-        </el-form-item>
-        <el-form-item label="下载说明title">
-          <el-input v-model="addForm.downloadTitle"  />
-        </el-form-item>
-        <el-form-item label="下载说明描述">
-          <el-input v-model="addForm.downloadDesc"  type="textarea" :autosize="{ minRows: 2, maxRows: 6}"/>
-        </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="addForm.remark"  />
+        <el-form-item
+          label="描述"
+        >
+          <el-input v-model="changeForm.desc" type="textarea" />
         </el-form-item>
         <el-row>
           <el-col :span="12">
@@ -111,41 +99,48 @@
     </el-card>
   </div>
 </template>
-
 <script lang="ts">
-import Vue from "vue";
+import Vue from 'vue'
 import { LoginModule } from "@/store/modules/login";
-import { addApkModule } from "@/store/modules/addApk";
-import { uploadImgToBase64 } from '@/utils/common'
-import md5 from "js-md5";
+import { addIosModule } from "@/store/modules/addIos";
+import { uploadImgToBase64 } from '@/utils/common';
 export default Vue.extend({
-  name: "addApkPage",
+  name: 'editIosPage',
   data() {
     return {
-      pcImageUrl: "",
-      moImageUrl: "",
+      pcImageUrl: '',
+      moImageUrl: '',
       pcFile: '',
       moFile: '',
-      addForm: {
-        buttonLink: "http://www.google.com",
-        buttonTxt: "downloadLink",
-        appId: 10092,
-        address: "http://www.address.com",
-        versionTitle: "versionTitle",
-        versionDesc: "versionDesc",
-        downloadTitle: "versionTitle",
-        downloadDesc: "versionDesc",
-        remark: "remark",
-        webTitle: "APK-TIP",
-        pageTitle: "新增落地页",
-        filePath: "test-apk-tip"
+      changeForm: {
+        id: '',
+        iosLink: '',
+        androidLink: '',
+        appId: '',
+        address: '',
+        pcImageUrl: '',
+        moImageUrl: '',
+        desc: '',
+        pageTitle: '',
+        webTitle: '',
+        filePath: '',
       }
-    };
+    }
   },
   computed: {
+    defaultData(){
+      return addIosModule.defaultData;
+    },
     appList() {
       return LoginModule.appList;
     }
+  },
+  mounted () {
+    this.pcImageUrl = (addIosModule.defaultData as any).pcImageUrl;
+    this.moImageUrl = (addIosModule.defaultData as any).moImageUrl;
+    Object.keys(addIosModule.defaultData).map(item=>{
+      (this.changeForm as any)[item] = (addIosModule.defaultData as any)[item];
+    })
   },
   methods: {
     beforeUpload(file: any){
@@ -194,35 +189,31 @@ export default Vue.extend({
           type: "warning"
         });
       }
-      (this.$refs.addForm as any).validate((valid: any) => {
+      (this.$refs.changeForm as any).validate((valid: any) => {
         if (valid) {
           const appInfo: any = this.appList.filter(
-            (item: any) => item.appId === this.addForm.appId
+            (item: any) => item.appId == this.changeForm.appId
           )[0];
           const formData: any = new FormData()
-          formData.append('buttonLink', this.addForm.buttonLink)
-          formData.append('buttonTxt', this.addForm.buttonTxt)
-          formData.append('appId', this.addForm.appId)
-          formData.append('address', 'http://172.16.10.103:3000/'+this.addForm.filePath)
-          formData.append('versionTitle', this.addForm.versionTitle)
-          formData.append('versionDesc', this.addForm.versionDesc)
-          formData.append('downloadTitle', this.addForm.downloadTitle)
-          formData.append('downloadDesc', this.addForm.downloadDesc)
-          formData.append('remark', this.addForm.remark)
-          formData.append('webTitle', this.addForm.webTitle)
-          formData.append('pageTitle', this.addForm.pageTitle)
-          formData.append('filePath', this.addForm.filePath)
+          formData.append('iosLink', this.changeForm.iosLink)
+          formData.append('androidLink', this.changeForm.androidLink)
+          formData.append('appId', this.changeForm.appId)
+          formData.append('address', this.changeForm.address)
+          formData.append('desc', this.changeForm.desc)
+          formData.append('webTitle', this.changeForm.webTitle)
+          formData.append('pageTitle', this.changeForm.pageTitle)
+          formData.append('filePath', this.changeForm.filePath)
           formData.append('appName', appInfo.appName)
           formData.append('moFile', this.moFile)
           formData.append('pcFile', this.pcFile)
-          formData.append('id', md5((''+new Date().getTime())+this.addForm.appId))
-          addApkModule.addApkPage(formData).then(() => {
+          formData.append('id', this.changeForm.id)
+          addIosModule.updateApkPage(formData).then(() => {
             this.$message({
-              message: "创建成功",
+              message: "编辑成功",
               type: "success"
             });
             setTimeout(() => {
-              this.$emit("handleChange", "ApkPageList");
+              this.$emit("handleChange", "IosPageList");
             }, 500);
           });
         } else {
@@ -231,13 +222,12 @@ export default Vue.extend({
         }
       });
     },
-    goBack() {
-      this.$emit("handleChange", "ApkPageList");
+    goBack(){
+      this.$emit('handleChange', 'IosPageList')
     }
   }
-});
+})
 </script>
-
 
 <style lang="scss" scoped>
 .avatar-uploader .el-upload {
@@ -247,7 +237,7 @@ export default Vue.extend({
   overflow: hidden;
 }
 .avatar-uploader .el-upload:hover {
-  border-color: #409eff;
+  border-color: #409EFF;
 }
 .avatar-uploader-icon {
   font-size: 28px;

@@ -77,7 +77,18 @@ export const routes: Array<RouteConfig> = [
           title: "addApkPage",
           icon: "el-icon-reading",
           affix: true,
-          zhName: "配置apk页面"
+          zhName: "Apk落地页配置"
+        }
+      },
+      {
+        path: "/main/addIosPage",
+        component: () => import("@/views/addIosPage/index.vue"),
+        name: "AddIosPage",
+        meta: {
+          title: "addIosPage",
+          icon: "el-icon-reading",
+          affix: true,
+          zhName: "Ios引导页配置"
         }
       },
       {

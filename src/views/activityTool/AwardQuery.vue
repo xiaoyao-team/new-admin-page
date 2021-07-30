@@ -1,9 +1,8 @@
 <template>
-  <div>
+  <div class="award-query">
     <el-card style="marginBottom:20px">
-      <el-form ref="awardQueryForm" :model="awardQueryForm" :rules="awardQueryFormRules" label-width="100px">
-        <el-row :gutter="40">
-          <el-col :span='8'>
+      <el-form ref="awardQueryForm" :model="awardQueryForm" :inline="true" :rules="awardQueryFormRules" label-width="100px">
+        <el-row :gutter="10">
             <el-form-item label="活动组:" prop="groupId">
               <el-select v-model="awardQueryForm.groupId" placeholder="请选择活动组" style="width:100%">
                 <el-option
@@ -18,14 +17,12 @@
               <el-select v-model="awardQueryForm.activityId" placeholder="请选择活动" style="width:100%">
                 <el-option
                   v-for="item in activityTabs"
-                  :key="item.activityId"
-                  :label="item.activityName"
-                  :value="item.activityId">
+                  :key="item.activity.activityId"
+                  :label="item.activity.activityName"
+                  :value="item.activity.activityId">
                 </el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span='8'>
             <el-form-item label="查询类型:" prop="queryType">
               <el-select v-model="awardQueryForm.queryType" placeholder="请选择查询类型" style="width:100%">
                 <el-option label="用户ID" :value="1"></el-option>
@@ -61,8 +58,6 @@
                 end-placeholder="结束日期">
               </el-date-picker>
             </el-form-item>
-          </el-col>
-          <el-col :span="5">
             <el-button type="primary" size="medium" @click="queryData">查询</el-button>
             <el-button
               :loading="downloadLoading"
@@ -73,7 +68,6 @@
             >
               导出Excel
             </el-button>
-          </el-col>
         </el-row>
       </el-form>
     </el-card>
@@ -248,6 +242,10 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+.award-query{
+  .el-form-item {
+    margin-bottom: 0; 
+  }
+}
 </style>

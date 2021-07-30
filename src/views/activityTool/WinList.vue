@@ -1,9 +1,7 @@
 <template>
-  <div>
+  <div class="win-list">
     <el-card style="marginBottom:20px">
-      <el-form ref="winListForm" :model="winListForm" :rules="winListFormRules" label-width="80px">
-        <el-row :gutter="40">
-          <el-col :span='7'>
+      <el-form ref="winListForm" :model="winListForm" :inline="true" :rules="winListFormRules" label-width="80px">
             <el-form-item label="活动组:" prop="groupId">
               <el-select v-model="winListForm.groupId" placeholder="请选择活动组" style="width:100%">
                 <el-option
@@ -18,14 +16,12 @@
               <el-select v-model="winListForm.activityId" placeholder="请选择活动" style="width:100%">
                 <el-option
                   v-for="item in activityTabs"
-                  :key="item.activityId"
-                  :label="item.activityName"
-                  :value="item.activityId">
+                  :key="item.activity.activityId"
+                  :label="item.activity.activityName"
+                  :value="item.activity.activityId">
                 </el-option>
               </el-select>
             </el-form-item>
-            </el-col>
-            <el-col :span="7">
               <el-form-item  label="礼包:" prop="giftPackageId">
                 <el-select v-model="winListForm.giftPackageId" placeholder="请选择礼包" style="width:100%">
                   <el-option
@@ -45,24 +41,18 @@
                   placeholder="选择日期时间">
                 </el-date-picker>
               </el-form-item>
-            </el-col>
-          
-          <el-col :span="10">
-            <el-button type="primary" size="medium" @click="queryData">查询</el-button>
-            <el-button type="success" size="medium" @click="addData">新增</el-button>
-            <el-button type="warning" size="medium" @click="deltData">删除</el-button>
-            <el-button
-              :loading="downloadLoading"
-              type="primary"
-              size="medium"
-              icon="el-icon-document"
-              @click="exportData"
-            >
-              导出Excel
-            </el-button>
-            <!-- <el-button type="info" size="medium" @click="exportData">导出</el-button> -->
-          </el-col>
-        </el-row>
+              <el-button type="primary" size="medium" @click="queryData">查询</el-button>
+              <el-button type="success" size="medium" @click="addData">新增</el-button>
+              <el-button type="warning" size="medium" @click="deltData">删除</el-button>
+              <el-button
+                :loading="downloadLoading"
+                type="primary"
+                size="medium"
+                icon="el-icon-document"
+                @click="exportData"
+              >
+                导出
+              </el-button>
       </el-form>
     </el-card>
     <el-card>
@@ -282,7 +272,13 @@ export default Vue.extend({
   }
 })
 </script>
-
+<style lang="scss">
+.win-list{
+  .el-form-item {
+    margin-bottom: 0; 
+  }
+}
+</style>
 <style lang="scss" scoped>
 
 </style>

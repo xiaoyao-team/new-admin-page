@@ -23,6 +23,9 @@
         >
           <el-input v-model="changeForm.pageTitle" />
         </el-form-item>
+        <el-form-item label="生成路径" prop="filePath" >
+          <el-input v-model="changeForm.filePath" disabled />
+        </el-form-item>
         <el-form-item
           label="网页title"
           prop="webTitle"
@@ -31,30 +34,45 @@
           <el-input v-model="changeForm.webTitle" />
         </el-form-item>
         <el-form-item
-          label="ios跳转链接"
-          prop="iosLink"
-          :rules="{ required: true, message: 'ios跳转链接不能为空'}"
+          label="下载按钮链接"
+          prop="buttonLink"
+          :rules="{ required: true, message: '下载链接不能为空'}"
         >
-          <el-input v-model="changeForm.iosLink" />
+          <el-input v-model="changeForm.buttonLink" />
         </el-form-item>
         <el-form-item
-          label="android跳转链接"
-          prop="androidLink"
-          :rules="{ required: true, message: 'android跳转链接不能为空'}"
+          label="下载按钮文本"
+          prop="buttonTxt"
+          :rules="{ required: true, message: '按钮文本不能为空'}"
         >
-          <el-input v-model="changeForm.androidLink" />
+          <el-input v-model="changeForm.buttonTxt" />
         </el-form-item>
         <el-form-item
           label="对应页面地址"
-          prop="androidLink"
+          prop="address"
           :rules="{ required: true, message: '对应页面地址不能为空'}"
         >
-          <el-input v-model="changeForm.address" />
+          <el-link type="success" target="_blank" :href="changeForm.address" >{{changeForm.address}}</el-link>
+          <!-- <el-input v-model="changeForm.address" disabled/> -->
         </el-form-item>
-        <el-form-item
-          label="描述"
-        >
-          <el-input v-model="changeForm.desc" type="textarea" />
+        <el-form-item label="版本说明title"
+          :rules="{ required: true, message: '下载链接不能为空'}">
+          <el-input v-model="changeForm.versionTitle" />
+        </el-form-item>
+        <el-form-item label="版本说明描述"
+          :rules="{ required: true, message: '下载链接不能为空'}">
+          <el-input v-model="changeForm.versionDesc" type="textarea" :autosize="{ minRows: 2, maxRows: 6}"/>
+        </el-form-item>
+        <el-form-item label="下载说明title"
+          :rules="{ required: true, message: '下载链接不能为空'}">
+          <el-input v-model="changeForm.downloadTitle"  />
+        </el-form-item>
+        <el-form-item label="下载说明描述"
+          :rules="{ required: true, message: '下载链接不能为空'}">
+          <el-input v-model="changeForm.downloadDesc" type="textarea" :autosize="{ minRows: 2, maxRows: 6}" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="changeForm.remark"  />
         </el-form-item>
         <el-row>
           <el-col :span="12">
@@ -114,16 +132,20 @@ export default Vue.extend({
       moFile: '',
       changeForm: {
         id: '',
-        iosLink: '',
-        androidLink: '',
         appId: '',
         address: '',
         pcImageUrl: '',
         moImageUrl: '',
-        desc: '',
         pageTitle: '',
         webTitle: '',
         filePath: '',
+        buttonLink: '',
+        buttonTxt: "",
+        versionTitle: "",
+        versionDesc: "",
+        downloadTitle: "",
+        downloadDesc: "",
+        remark: "",
       }
     }
   },
@@ -195,11 +217,15 @@ export default Vue.extend({
             (item: any) => item.appId == this.changeForm.appId
           )[0];
           const formData: any = new FormData()
-          formData.append('iosLink', this.changeForm.iosLink)
-          formData.append('androidLink', this.changeForm.androidLink)
+          formData.append('buttonLink', this.changeForm.buttonLink)
+          formData.append('buttonTxt', this.changeForm.buttonTxt)
           formData.append('appId', this.changeForm.appId)
           formData.append('address', this.changeForm.address)
-          formData.append('desc', this.changeForm.desc)
+          formData.append('versionTitle', this.changeForm.versionTitle)
+          formData.append('versionDesc', this.changeForm.versionDesc)
+          formData.append('downloadTitle', this.changeForm.downloadTitle)
+          formData.append('downloadDesc', this.changeForm.downloadDesc)
+          formData.append('remark', this.changeForm.remark)
           formData.append('webTitle', this.changeForm.webTitle)
           formData.append('pageTitle', this.changeForm.pageTitle)
           formData.append('filePath', this.changeForm.filePath)
